@@ -1,4 +1,4 @@
-# SmartCounterAI Final Project
+# SmartCounterAI
 
 SmartCounterAI là đồ án nhận dạng, theo dõi và đếm người/phương tiện trong video hoặc camera.
 
