@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả nhận diện ảnh</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f2f5fa; }
+        .card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+        img { width: 100%; max-width: 1100px; border-radius: 12px; border: 1px solid #ddd; }
+        a { color: #2563eb; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Kết quả nhận diện ảnh</h1>
+
+    <img src="{{ url_for('outputs', filename=image_file) }}" alt="Kết quả nhận diện">
+
+    <p>
+        <a href="{{ url_for('download', filename=image_file) }}">Tải ảnh kết quả</a> |
+        <a href="{{ url_for('index') }}">Quay lại</a>
+    </p>
+</div>
+</body>
+</html>

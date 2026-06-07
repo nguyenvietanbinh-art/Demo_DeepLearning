@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả SmartCounterAI</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f2f5fa; }
+        .card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+        video { width: 100%; max-width: 1100px; background: #000; border-radius: 12px; }
+        a { color: #2563eb; font-weight: bold; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; }
+        @media (max-width: 800px) { .stats { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Kết quả xử lý</h1>
+
+    <h2>Thống kê</h2>
+    <p><b>Tổng:</b> {{ summary.total }}</p>
+    <p><b>Line mode:</b> {{ summary.line_mode }} | <b>Line X:</b> {{ summary.line_x }} | <b>Line Y:</b> {{ summary.line_y }}</p>
+
+    <div class="stats">
+        <div>
+            <h3>Theo class</h3>
+            <ul>
+                {% for k, v in summary.by_class.items() %}
+                <li>{{ k }}: {{ v }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h3>Theo hướng</h3>
+            <ul>
+                {% for k, v in summary.by_direction.items() %}
+                <li>{{ k }}: {{ v }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <h2>Video output</h2>
+    <video controls preload="metadata">
+        <source src="{{ url_for('outputs', filename=video_file) }}" type="video/mp4">
+        Trình duyệt không hỗ trợ phát video.
+    </video>
+
+    <p>
+        <a href="{{ url_for('download', filename=video_file) }}">Tải video output</a> |
+        <a href="{{ url_for('download', filename=csv_file) }}">Tải thống kê CSV</a> |
+        <a href="{{ url_for('index') }}">Quay lại</a>
+    </p>
+</div>
+</body>
+</html>

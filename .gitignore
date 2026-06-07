@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+
+venv/
+.env
+
+*.pt
+*.onnx
+*.engine
+
+*.mp4
+*.avi
+*.csv
+
+.vscode/
+.idea/

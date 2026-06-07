@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartCounterAI</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f2f5fa; }
+        .container { max-width: 1100px; margin: auto; }
+        .card { background: white; padding: 24px; margin-bottom: 24px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+        h1 { color: #1f3b73; }
+        input, select { padding: 8px; margin: 8px 0; width: 300px; }
+        button { padding: 10px 18px; border: none; border-radius: 8px; background: #2563eb; color: white; cursor: pointer; font-weight: bold; }
+        .hint { color: #555; font-size: 14px; max-width: 700px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .alert { padding: 12px; background: #fee2e2; color: #991b1b; border-radius: 8px; margin-bottom: 16px; }
+        @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>SmartCounterAI</h1>
+    <p>Nhận dạng ảnh/video/camera bằng 2 model YOLOv8 + ByteTrack + OpenCV.</p>
+    <p class="hint">Model custom: Sitting, Standing, Person, Tricycle. Model COCO: Car, Motorcycle, Bus, Truck.</p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="grid">
+        <div class="card">
+            <h2>Upload Video</h2>
+            <form action="/process-video" method="POST" enctype="multipart/form-data">
+                <label>Chọn video:</label><br>
+                <input type="file" name="video" accept="video/*" required><br>
+
+                <label>Line mode:</label><br>
+                <select name="line_mode">
+                    <option value="none">None - chỉ nhận diện, không đếm</option>
+                    <option value="auto" selected>Auto - tự chọn hướng phù hợp</option>
+                    <option value="vertical">Vertical - line dọc cho xe chạy ngang</option>
+                    <option value="horizontal">Horizontal - line ngang cho xe chạy lên/xuống</option>
+                </select><br>
+
+                <label>Line position:</label><br>
+                <input type="number" step="0.05" name="line_pos" value="0.5">
+                <p class="hint">0.5 nghĩa là vạch ở giữa video. Có thể nhập pixel như 300.</p>
+
+                <label>Confidence:</label><br>
+                <input type="number" step="0.01" name="conf" value="0.15"><br>
+                <p class="hint">Người bị che/ở xa: thử 0.10–0.15. Nhiễu nhiều: tăng 0.25–0.35.</p>
+
+                <label>
+                    <input type="checkbox" name="keep_original" checked style="width:auto">
+                    Giữ nguyên kích thước/tỉ lệ video gốc
+                </label>
+                <p class="hint">Nếu video 2K/4K quá nặng, bỏ chọn để giảm tải hoặc dùng video ngắn hơn.</p>
+
+                <button type="submit">Xử lý video</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Camera Input</h2>
+            <form action="/process-camera" method="POST">
+                <label>Camera index:</label><br>
+                <input type="number" name="camera_index" value="0"><br>
+
+                <label>Line mode:</label><br>
+                <select name="line_mode">
+                    <option value="none" selected>None - chỉ nhận diện</option>
+                    <option value="auto">Auto</option>
+                    <option value="vertical">Vertical</option>
+                    <option value="horizontal">Horizontal</option>
+                </select><br>
+
+                <label>Line position:</label><br>
+                <input type="number" step="0.05" name="line_pos" value="0.5"><br>
+
+                <label>Confidence:</label><br>
+                <input type="number" step="0.01" name="conf" value="0.15"><br>
+
+                <button type="submit">Chạy camera</button>
+            </form>
+            <p class="hint">Khi chạy camera sẽ mở cửa sổ OpenCV. Nhấn ESC để kết thúc.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Nhận diện ảnh</h2>
+        <form action="/process-image" method="POST" enctype="multipart/form-data">
+            <label>Chọn ảnh:</label><br>
+            <input type="file" name="image" accept="image/*" required><br>
+            <button type="submit">Nhận diện ảnh</button>
+        </form>
+        <p class="hint">Ảnh tĩnh dùng conf=0.12 và imgsz=1280 để dễ bắt người nhỏ hoặc bị che.</p>
+    </div>
+</div>
+</body>
+</html>

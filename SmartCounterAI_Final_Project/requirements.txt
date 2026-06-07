@@ -1,0 +1,9 @@
+ultralytics
+opencv-python
+numpy
+pandas
+boxmot
+flask
+imageio-ffmpeg
+filterpy
+lapx
